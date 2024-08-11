@@ -14,7 +14,7 @@ This operating system presents a set of critical vulnerabilities that have been 
 The first vulnerability used is identified as Microsoft Security Bulletin MS12-020[^MS12], where the version initially used was Windows XP (32-bit), hosted on Oracle VM VirtualBox, with Kali Linux used as the operating system where the necessary operations will be performed. 
 The first test intended is to use an exploit that affects Microsoft Terminal Services, specifically a service called Remote Desktop Protocol, which provides a connection to a desktop environment of another computer, meaning it allows remote use of a computer.
 
-[^MS12]: Microsoft Windows. (13 March, 2012). Microsoft Security Bulletin MS12-020 – Critical. https://learn.microsoft.com/en-us/securityupdates/SecurityBulletins/2012/ms12-020?redirectedfrom=MSDN
+[^MS12]: Microsoft Windows. (13 March, 2012). Microsoft Security Bulletin MS12-020 – Critical. https://learn.microsoft.com/en-us/security-updates/SecurityBulletins/2012/ms12-020?redirectedfrom=MSDN
 
 The concept used in this domain is ports. Ports are internet connections controlled by a computer's operating system that are part of the OSI model[^OSI], where each port is associated with a specific process or service and a number. 
 This allows differentiation of which services are being used at any given moment. However, to achieve the intended goal, it is necessary to establish a connection with a port on the target machine, but there is no understanding of this process or how it occurs.
@@ -28,3 +28,5 @@ In the first phase, access to port 3389 – TCP of the target machine is require
 However, something crucial is missing: the IP address of the machine, which is a protocol that allows information to travel to the correct destination, with each piece of information being linked to each packet sent. 
 In these examples, the IP address is known by definition, but in a real situation, an attacker would need to find a way to obtain this information. 
 To verify the port, a software on Kali Linux called Nmap (Network Mapper) is used, which maps networks, identifies active networks, and running services through the machine's IP address. When the mapping is performed, the following results are obtained:
+
+![Nmap](assets/nmap1.png)
