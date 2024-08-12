@@ -59,8 +59,8 @@ After the packet is sent, a verification is performed to determine whether the s
 
 This exploit also works with Windows 7. You just need to enable Remote Desktop Protocol as shown below. Make sure the port is open first.
 
-<img src="assets/rdp.png" align="center" width="600" height="450">
-
-<br>
-
-<img src="assets/crash2.png" align="center" width="600" height="450">
+<div align="center">
+    <img src="assets/rdp.png" align="center" width="600" height="450">
+    <br>
+    <img src="assets/crash2.png" align="center" width="600" height="450">
+</div>
