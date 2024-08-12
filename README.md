@@ -1,4 +1,4 @@
-# Denial of Service (Dos)
+# Denial of Service (DoS)
 
 - This repository was made to show (in an educational way) how you can exploit older versions of Microsoft Windows.
 
@@ -52,7 +52,9 @@ Next, the goal is to set the IP address of the machine using the command `set rh
 
 ![Crash1](assets/crash1.png)
 
-This vulnerability allows the execution of arbitrary code by sending RDP packets in a `maxChannelIds` field within the `T.125 ConnectMCSPDU` packet when the value set is less than or equal to 5, resulting in the return of an invalid pointer, thereby causing a Denial-of-Service condition, leading to a crash and reboot of the machine.
+This vulnerability allows the execution of arbitrary code by sending RDP packets in a `maxChannelIds` field within the `T.125 ConnectMCSPDU` packet when the value set is less than or equal to 5, resulting in the return of an invalid pointer, thereby causing a Denial-of-Service condition, leading to a crash and reboot of the machine.[^DB1]
+
+[^DB1]:  Auriemma, L. (March 16, 2012). Microsoft Terminal Services – Use-After-Free (MS12-020). Exploit Database. https://www.exploit-db.com/exploits/18606
 
 In the first phase, it is checked whether the Remote Desktop Protocol is available or not. After this process, a function creates a packet with specific values, particularly for the `maxChannelIds` field, and all of this is placed inside a socket. 
 After the packet is sent, a verification is performed to determine whether the service is down or not, and finally, the execution is completed.
@@ -60,7 +62,57 @@ After the packet is sent, a verification is performed to determine whether the s
 This exploit also works with Windows 7. You just need to enable Remote Desktop Protocol as shown below. Make sure the port is open first.
 
 <div align="center">
-    <img src="assets/rdp.png" align="center" width="600" height="450">
-    <br>
-    <img src="assets/crash2.png" align="center" width="600" height="450">
+    <img src="assets/rdp.png" width="600" height="450">
+    <img src="assets/crash2.png" width="600" height="450">
 </div>
+
+<br>
+
+## Microsoft Terminal Services - HTTP Request Parsing (MS15-034)
+
+### Exploit abstract
+
+The second vulnerability to be tested is known as Microsoft Security Bulletin MS15-034[^MS15]. For this second part, Windows 7 (64-bit) was used.
+
+[^MS15]: Microsoft Windows. (April 14, 2015). Microsoft Security Bulletin MS15-034 – Critical. https://learn.microsoft.com/en-us/security-updates/securitybulletins/2015/ms15-034
+
+The Internet Information Services[^IIS] (IIS) is a web server that runs on the Windows operating system and is used to exchange static or dynamic content and to manage web applications such as ASP.NET Core. 
+When a user accesses the server through their web browser, an HTTP request is sent, and there is a driver called Hypertext Transfer Protocol Stack, or HTTP.sys, which receives the request, sends it to IIS for processing, and once completed, HTTP.sys returns a response to the user's browser.
+
+[^IIS]: Microsoft Windows. (March 13, 2024). Installing IIS 7 on Windows Vista and Windows 7. https://learn.microsoft.com/pt-br/iis/install/installing-iis-7/installing-iison-windows-vista-and-windows-7
+
+However, there is a problem with HTTP.sys, where it incorrectly parses HTTP requests that have been crafted in a specific way. This protocol is associated with port 80 TCP, and it is through this port that the vulnerability is intended to be exploited.
+
+### Launching the exploit
+
+Now you need to enable IIS resources and for that, you can check the reference above about IIS.
+
+After the installation, open your browser, type `http://localhost` and check if it displays the following:
+
+<div align="center">
+    <img src="assets/iis.png" width="600" height="450">
+</div>
+
+Now, all you need is to open a new terminal and type the following command:
+
+```bash
+wget --header="Range: bytes=18-18446744073709551615" http://ip-from-target/welcome.png
+```
+
+Command | Description
+:---: | ---
+`wget` | Command that initiates the download of a file from the Internet.
+`--header=STRING` | Inserts a header into the web request being made. In this case, a byte "range" is specified, from 18 to 18446744073709551615. This is the largest possible value for a 64-bit number, which is the point of vulnerability.
+`http://ip-from-target/welcome.png` | Page containing the file to be downloaded.
+
+While running the command, it gives us a message that HTTP request[^DB2] was sent and Windows crashes immediately.
+
+[^DB2]: Gaffie, L. (April 16, 2015). Microsoft Windows – ‘HTTP.sys’ HTTP Request Parsing Denial of Service (MS15-034). Exploit Database. https://www.exploitdb.com/exploits/36776
+
+<div align="center">
+    <img src="assets/crash3.png" width="600" height="450">
+</div>
+
+## Defense from the exploits
+
+Although Microsoft never gave specifications about these critical exploits, you can check their security updates and know some alternatives and solutions that protect the system.
