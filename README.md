@@ -18,7 +18,7 @@ The first test intended is to use an exploit that affects Microsoft Terminal Ser
 
 [^MS12]: Microsoft Windows. (March 13, 2012). Microsoft Security Bulletin MS12-020 – Critical. https://learn.microsoft.com/en-us/security-updates/SecurityBulletins/2012/ms12-020?redirectedfrom=MSDN
 
-The concept used in this domain is ports. Ports are internet connections controlled by a computer's operating system that are part of the OSI model[^OSI], where each port is associated with a specific process or service and a number. 
+The concept used in this domain are ports. Ports are internet connections controlled by a computer's operating system that are part of the OSI model[^OSI], where each port is associated with a specific process or service and a number. 
 This allows differentiation of which services are being used at any given moment. However, to achieve the intended goal, it is necessary to establish a connection with a port on the target machine, but there is no understanding of this process or how it occurs.
 
 [^OSI]: Cloudflare. What is a computer port? https://www.cloudflare.com/learning/network-layer/what-is-a-computer-port/
@@ -40,15 +40,15 @@ To verify the port, a software on Kali Linux called Nmap[^Nmap] (Network Mapper)
 
 [^Nmap]: Nmap. Chapter 15. Nmap Reference Guide. https://nmap.org/book/man.html
 
-### Lauching the exploit
+### Launching the exploit
 
-Now, it is necessary to use a tool that allows searching for the required exploit. The Metasploit Framework[^Meta] is an open-source version that operates in the Linux command line and allows for various tasks, such as information gathering, scanning, using and developing exploits, and much more. To use this tool, simply access it through the "msfconsole" command in a Linux terminal.
+Now, it is necessary to use a tool that allows searching for the required exploit. The Metasploit Framework[^Meta] is an open-source version that operates in the Linux command line and allows for various tasks, such as information gathering, scanning, using and developing exploits, and much more. To use this tool, simply access it through the `msfconsole` command in a Linux terminal.
 
 [^Meta]: g0tmi1k. (June 30, 2023). Metasploit Framework. Kali. https://www.kali.org/docs/tools/starting-metasploit-framework-in-kali/
 
 ![MS12](assets/ms12.png)
 
-Next, the goal is to set the IP address of the machine using the command `set rhosts 10.0.2.4` and run the exploit with the command `run`. The following results are observed:
+Next, the goal is to set the IP address of the machine using the command `set rhosts [ip]` and run the exploit with the command `run`. The following results are observed:
 
 ![Crash1](assets/crash1.png)
 
@@ -56,3 +56,9 @@ This vulnerability allows the execution of arbitrary code by sending RDP packets
 
 In the first phase, it is checked whether the Remote Desktop Protocol is available or not. After this process, a function creates a packet with specific values, particularly for the `maxChannelIds` field, and all of this is placed inside a socket. 
 After the packet is sent, a verification is performed to determine whether the service is down or not, and finally, the execution is completed.
+
+This exploit also works with Windows 7. You just need to enable Remote Desktop Protocol as shown below. Make sure the port is open first.
+
+![RDP](assets/rdp.png)
+
+![Crash2](assets/crash2.png)
